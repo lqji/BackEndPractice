@@ -89,5 +89,28 @@ namespace FMS
             Console.WriteLine($"\nSuccess! Passenger registered with ID: {newId}");
             Console.ReadLine();
         }
+
+        public static void AddAircraft()
+        {
+            Console.WriteLine("--- Add an Aircraft ---");
+            Console.Write("Enter Model (e.g., Boeing 737): ");
+            string model = Console.ReadLine();
+            Console.Write("Enter Total Seats: ");
+            int seats = int.Parse(Console.ReadLine());
+
+            int newId = Context.Aircrafts.Count > 0 ? Context.Aircrafts.Max(a => a.aircraftID) + 1 : 1;
+
+            Aircraft aircraft = new Aircraft
+            {
+                aircraftID = newId,
+                model = model,
+                totalSeats = seats,
+                isOperational = true
+            };
+
+            Context.Aircrafts.Add(aircraft);
+            Console.WriteLine($"\nSuccess! Aircraft recorded with ID: {newId}");
+            Console.ReadLine();
+        }
     }
 }
