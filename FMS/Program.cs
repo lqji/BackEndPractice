@@ -217,5 +217,69 @@ namespace FMS
             Console.WriteLine($"\nSuccess! Flight {generatedCode} scheduled successfully.");
             Console.ReadLine();
         }
+
+        public static void BookFlight()
+        {
+            Console.WriteLine("--- Book a Flight ---");
+            Console.Write("Enter Passenger ID: ");
+            int passengerId = int.Parse(Console.ReadLine());
+            var passanger = Context.Passangers.FirstOrDefault(p => p.passengerId == passengerId);
+            if (passanger == null)
+            {
+                Console.WriteLine("Passenger not found.");
+                Console.ReadLine();
+                return;
+            }
+
+            Console.Write("Enter Destination City: ");
+            string dest = Console.ReadLine();
+
+            var availableFlights = Context.Flights
+                .Where(f => f.destination.Equals(dest, StringComparison.OrdinalIgnoreCase) && f.flightStatus == "Scheduled" && f.availableSeats > 0)
+                .ToList();
+
+            if (!availableFlights.Any())
+            {
+                Console.WriteLine("No available scheduled flights to that destination.");
+                Console.ReadLine();
+                return;
+            }
+
+            Console.WriteLine("\nAvailable Flights:");
+            foreach (var f in availableFlights)
+            {
+                Console.WriteLine($"ID: {f.flightId} | Code: {f.flightCode} | Price: {f.ticketPrice:F2} OMR | Seats Left: {f.availableSeats}");
+            }
+
+            Console.Write("\nEnter Flight ID to book: ");
+            int targetFlightId = int.Parse(Console.ReadLine());
+            var selectedFlight = availableFlights.FirstOrDefault(f => f.flightId == targetFlightId);
+
+            if (selectedFlight == null)
+            {
+                Console.WriteLine("Invalid selection.");
+                Console.ReadLine();
+                return;
+            }
+
+            selectedFlight.availableSeats--;
+            int newBookingId = Context.Bookings.Count > 0 ? Context.Bookings.Max(b => b.BookingId) + 1 : 1;
+            string seatLabel = $"{(int)selectedFlight.availableSeats + 1}A";
+
+            Booking booking = new Booking
+            {
+                BookingId = newBookingId,
+                passengerId = passanger.passengerId,
+                flightId = selectedFlight.flightId,
+                seatNumber = seatLabel,
+                bookingDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                totalPrice = selectedFlight.ticketPrice,
+                status = "Confirmed"
+            };
+
+            Context.Bookings.Add(booking);
+            Console.WriteLine($"\nSuccess! Booking confirmed. Seat: {seatLabel}, Booking ID: {newBookingId}");
+            Console.ReadLine();
+        }
     }
 }
