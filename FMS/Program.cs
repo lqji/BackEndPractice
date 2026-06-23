@@ -334,5 +334,34 @@ namespace FMS
             Console.WriteLine($"Flight {flight.flightCode} has departed.");
             Console.ReadLine();
         }
+
+        public static void CancelFlight()
+        {
+            Console.WriteLine("--- Cancel Entire Flight ---");
+            Console.Write("Enter Flight ID to cancel: ");
+            int targetFlightId = int.Parse(Console.ReadLine());
+
+            var flight = Context.Flights.FirstOrDefault(f => f.flightId == targetFlightId && f.flightStatus == "Scheduled");
+            if (flight == null)
+            {
+                Console.WriteLine("Scheduled flight not found.");
+                Console.ReadLine();
+                return;
+            }
+
+            flight.flightStatus = "Cancelled";
+
+            var pilot = Context.Pilots.FirstOrDefault(p => p.pilotId == flight.pilotId);
+            if (pilot != null) pilot.isAvailable = true;
+
+            var associatedBookings = Context.Bookings.Where(b => b.flightId == targetFlightId && b.status == "Confirmed").ToList();
+            foreach (var b in associatedBookings)
+            {
+                b.status = "Cancelled";
+            }
+
+            Console.WriteLine($"Flight {flight.flightCode} cancelled. Affected bookings updated: {associatedBookings.Count}");
+            Console.ReadLine();
+        }
     }
 }
