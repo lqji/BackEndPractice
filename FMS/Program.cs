@@ -402,5 +402,43 @@ namespace FMS
             Console.WriteLine($"\nTotal Spent (Confirmed Bookings Only): {totalSpent:F2} OMR");
             Console.ReadLine();
         }
+
+        public static void FlightRevenueReport()
+        {
+            Console.WriteLine("--- Flight Revenue & Load Factor Report ---");
+
+            var reportData = Context.Flights.Select(f =>
+            {
+                var aircraft = Context.Aircrafts.FirstOrDefault(a => a.aircraftID == f.aircraftId);
+                int totalSeats = aircraft?.totalSeats ?? 1;
+
+                var confirmedBookings = Context.Bookings.Where(b => b.flightId == f.flightId && b.status == "Confirmed").ToList();
+                int confirmedCount = confirmedBookings.Count;
+                double revenue = confirmedBookings.Sum(b => b.totalPrice);
+                double loadFactor = ((double)confirmedCount / totalSeats) * 100;
+
+                return new
+                {
+                    FlightCode = f.flightCode,
+                    Route = $"{f.origin} -> {f.destination}",
+                    ConfirmedCount = confirmedCount,
+                    Revenue = revenue,
+                    LoadFactor = loadFactor
+                };
+            })
+            .OrderByDescending(r => r.Revenue)
+            .ToList();
+
+            foreach (var item in reportData)
+            {
+                Console.WriteLine($"Flight: {item.FlightCode} | Route: {item.Route} | Bookings: {item.ConfirmedCount} | Revenue: {item.Revenue:F2} OMR | Load Factor: {item.LoadFactor:F2}%");
+            }
+
+            double grandTotalRevenue = reportData.Sum(r => r.Revenue);
+            Console.WriteLine($"\n=========================================");
+            Console.WriteLine($"GRAND TOTAL REVENUE ACROSS SYSTEM: {grandTotalRevenue:F2} OMR");
+            Console.WriteLine("=========================================");
+            Console.ReadLine();
+        }
     }
 }
