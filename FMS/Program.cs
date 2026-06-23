@@ -281,5 +281,30 @@ namespace FMS
             Console.WriteLine($"\nSuccess! Booking confirmed. Seat: {seatLabel}, Booking ID: {newBookingId}");
             Console.ReadLine();
         }
+
+        public static void CancelBooking()
+        {
+            Console.WriteLine("--- Cancel a Booking ---");
+            Console.Write("Enter Booking ID: ");
+            int targetBookingId = int.Parse(Console.ReadLine());
+
+            var booking = Context.Bookings.FirstOrDefault(b => b.BookingId == targetBookingId && b.status == "Confirmed");
+            if (booking == null)
+            {
+                Console.WriteLine("Confirmed booking not found.");
+                Console.ReadLine();
+                return;
+            }
+
+            var flight = Context.Flights.FirstOrDefault(f => f.flightId == booking.flightId);
+            if (flight != null)
+            {
+                flight.availableSeats++;
+            }
+
+            booking.status = "Cancelled";
+            Console.WriteLine("Booking successfully cancelled.");
+            Console.ReadLine();
+        }
     }
 }
