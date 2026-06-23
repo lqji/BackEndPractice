@@ -58,5 +58,36 @@ namespace FMS
                 }
             }
         }
+
+        public static void RegisterPassenger()
+        {
+            Console.WriteLine("--- Register a Passenger ---");
+            Console.Write("Enter Full Name: ");
+            string name = Console.ReadLine();
+            Console.Write("Enter Email: ");
+            string email = Console.ReadLine();
+            Console.Write("Enter Phone: ");
+            string phone = Console.ReadLine();
+            Console.Write("Enter Passport Number: ");
+            string passport = Console.ReadLine();
+            Console.Write("Enter Nationality: ");
+            string nationality = Console.ReadLine();
+
+            int newId = Context.Passangers.Count > 0 ? Context.Passangers.Max(p => p.passengerId) + 1 : 1;
+
+            Passanger passanger = new Passanger
+            {
+                passengerId = newId,
+                passengerName = name,
+                passengerEmail = email,
+                passengerPhone = phone,
+                passportNumber = passport,
+                nationality = nationality
+            };
+
+            Context.Passangers.Add(passanger);
+            Console.WriteLine($"\nSuccess! Passenger registered with ID: {newId}");
+            Console.ReadLine();
+        }
     }
 }
