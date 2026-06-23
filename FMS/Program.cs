@@ -306,5 +306,33 @@ namespace FMS
             Console.WriteLine("Booking successfully cancelled.");
             Console.ReadLine();
         }
+
+        public static void DepartFlight()
+        {
+            Console.WriteLine("--- Depart a Flight ---");
+            Console.Write("Enter Flight ID: ");
+            int targetFlightId = int.Parse(Console.ReadLine());
+
+            var flight = Context.Flights.FirstOrDefault(f => f.flightId == targetFlightId && f.flightStatus == "Scheduled");
+            if (flight == null)
+            {
+                Console.WriteLine("Scheduled flight not found.");
+                Console.ReadLine();
+                return;
+            }
+
+            flight.flightStatus = "Departed";
+
+            var pilot = Context.Pilots.FirstOrDefault(p => p.pilotId == flight.pilotId);
+            if (pilot != null)
+            {
+                int.TryParse(pilot.flightHours, out int hours);
+                hours += 3;
+                pilot.flightHours = hours.ToString();
+            }
+
+            Console.WriteLine($"Flight {flight.flightCode} has departed.");
+            Console.ReadLine();
+        }
     }
 }
