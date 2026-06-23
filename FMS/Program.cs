@@ -112,5 +112,32 @@ namespace FMS
             Console.WriteLine($"\nSuccess! Aircraft recorded with ID: {newId}");
             Console.ReadLine();
         }
+
+        public static void RegisterPilot()
+        {
+            Console.WriteLine("--- Register a Pilot ---");
+            Console.Write("Enter Name: ");
+            string name = Console.ReadLine();
+            Console.Write("Enter Phone: ");
+            string phone = Console.ReadLine();
+            Console.Write("Enter License Number: ");
+            string license = Console.ReadLine();
+
+            int newId = Context.Pilots.Count > 0 ? Context.Pilots.Max(p => p.pilotId) + 1 : 1;
+
+            Pilot pilot = new Pilot
+            {
+                pilotId = newId,
+                pilotName = name,
+                pilotPhone = phone,
+                licenseNumber = license,
+                flightHours = "0",
+                isAvailable = true
+            };
+
+            Context.Pilots.Add(pilot);
+            Console.WriteLine($"\nSuccess! Pilot registered with ID: {newId}");
+            Console.ReadLine();
+        }
     }
 }
