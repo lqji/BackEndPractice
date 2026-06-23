@@ -363,5 +363,44 @@ namespace FMS
             Console.WriteLine($"Flight {flight.flightCode} cancelled. Affected bookings updated: {associatedBookings.Count}");
             Console.ReadLine();
         }
+
+        public static void PassengerBookingHistory()
+        {
+            Console.WriteLine("--- Passenger Booking History ---");
+            Console.Write("Enter Passenger ID: ");
+            int targetPassengerId = int.Parse(Console.ReadLine());
+
+            var passanger = Context.Passangers.FirstOrDefault(p => p.passengerId == targetPassengerId);
+            if (passanger == null)
+            {
+                Console.WriteLine("Passenger not found.");
+                Console.ReadLine();
+                return;
+            }
+
+            Console.WriteLine($"\nTravel History for: {passanger.passengerName}");
+            var history = Context.Bookings.Where(b => b.passengerId == targetPassengerId).ToList();
+
+            double totalSpent = 0;
+
+            foreach (var b in history)
+            {
+                var flight = Context.Flights.FirstOrDefault(f => f.flightId == b.flightId);
+                string flightCode = flight?.flightCode ?? "N/A";
+                string origin = flight?.origin ?? "N/A";
+                string dest = flight?.destination ?? "N/A";
+                string dateStr = flight != null ? flight.departureDate.ToString("yyyy-MM-dd") : "N/A";
+
+                Console.WriteLine($"- Flight: {flightCode} ({origin} -> {dest}) | Date: {dateStr} | Seat: {b.seatNumber} | Paid: {b.totalPrice:F2} OMR | Status: {b.status}");
+
+                if (b.status == "Confirmed")
+                {
+                    totalSpent += b.totalPrice;
+                }
+            }
+
+            Console.WriteLine($"\nTotal Spent (Confirmed Bookings Only): {totalSpent:F2} OMR");
+            Console.ReadLine();
+        }
     }
 }
