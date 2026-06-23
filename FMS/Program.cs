@@ -139,5 +139,22 @@ namespace FMS
             Console.WriteLine($"\nSuccess! Pilot registered with ID: {newId}");
             Console.ReadLine();
         }
+
+        public static void ViewAllFlights()
+        {
+            Console.WriteLine("--- All Scheduled Flights ---");
+            if (!Context.Flights.Any())
+            {
+                Console.WriteLine("No flights scheduled yet.");
+            }
+            else
+            {
+                foreach (var f in Context.Flights)
+                {
+                    Console.WriteLine($"Code: {f.flightCode} | {f.origin} -> {f.destination} | Date: {f.departureDate:yyyy-MM-dd} {f.departureTime:HH:mm} | Seats Left: {f.availableSeats} | Price: {f.ticketPrice:F2} OMR | Status: {f.flightStatus}");
+                }
+            }
+            Console.ReadLine();
+        }
     }
 }
