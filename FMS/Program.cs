@@ -156,5 +156,66 @@ namespace FMS
             }
             Console.ReadLine();
         }
+
+        public static void ScheduleFlight()
+        {
+            Console.WriteLine("--- Schedule a New Flight ---");
+            Console.Write("Enter Origin City: ");
+            string origin = Console.ReadLine();
+            Console.Write("Enter Destination City: ");
+            string dest = Console.ReadLine();
+            Console.Write("Enter Departure Date (yyyy-MM-dd): ");
+            DateTime date = DateTime.ParseExact(Console.ReadLine(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            Console.Write("Enter Departure Time (HH:mm): ");
+            DateTime time = DateTime.ParseExact(Console.ReadLine(), "HH:mm", CultureInfo.InvariantCulture);
+            Console.Write("Enter Ticket Price: ");
+            double price = double.Parse(Console.ReadLine());
+
+            Console.Write("Enter Aircraft ID: ");
+            int targetAircraftId = int.Parse(Console.ReadLine());
+            var aircraft = Context.Aircrafts.FirstOrDefault(a => a.aircraftID == targetAircraftId && a.isOperational);
+
+            if (aircraft == null)
+            {
+                Console.WriteLine("Error: Aircraft not found or is grounded for maintenance.");
+                Console.ReadLine();
+                return;
+            }
+
+            Console.Write("Enter Pilot ID: ");
+            int targetPilotId = int.Parse(Console.ReadLine());
+            var pilot = Context.Pilots.FirstOrDefault(p => p.pilotId == targetPilotId && p.isAvailable);
+
+            if (pilot == null)
+            {
+                Console.WriteLine("Error: Pilot not found or is currently unavailable.");
+                Console.ReadLine();
+                return;
+            }
+
+            int newId = Context.Flights.Count > 0 ? Context.Flights.Max(f => f.flightId) + 1 : 1;
+            string generatedCode = $"OA-{100 + newId}";
+
+            Flight flight = new Flight
+            {
+                flightId = newId,
+                flightCode = generatedCode,
+                flightNumber = generatedCode,
+                aircraftId = aircraft.aircraftID,
+                pilotId = pilot.pilotId,
+                origin = origin,
+                destination = dest,
+                departureDate = date,
+                departureTime = time,
+                ticketPrice = price,
+                availableSeats = aircraft.totalSeats,
+                flightStatus = "Scheduled"
+            };
+
+            pilot.isAvailable = false;
+            Context.Flights.Add(flight);
+            Console.WriteLine($"\nSuccess! Flight {generatedCode} scheduled successfully.");
+            Console.ReadLine();
+        }
     }
 }
