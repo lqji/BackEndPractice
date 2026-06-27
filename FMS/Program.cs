@@ -59,7 +59,7 @@ namespace FMS
             }
         }
 
-        public static void RegisterPassenger()
+        public static void RegisterPassenger() //Register a passanger to the database
         {
             Console.WriteLine("--- Register a Passenger ---");
             Console.Write("Enter Full Name: ");
@@ -90,16 +90,15 @@ namespace FMS
             Console.ReadLine();
         }
 
-        public static void AddAircraft()
+        public static void AddAircraft() //Register a new Aircraft 
         {
             Console.WriteLine("--- Add an Aircraft ---");
             Console.Write("Enter Model (e.g., Boeing 737): ");
             string model = Console.ReadLine();
             Console.Write("Enter Total Seats: ");
             int seats = int.Parse(Console.ReadLine());
-
+            
             int newId = Context.Aircrafts.Count > 0 ? Context.Aircrafts.Max(a => a.aircraftID) + 1 : 1;
-
             Aircraft aircraft = new Aircraft
             {
                 aircraftID = newId,
@@ -140,7 +139,7 @@ namespace FMS
             Console.ReadLine();
         }
 
-        public static void ViewAllFlights()
+        public static void ViewAllFlights() //view all schedule 
         {
             Console.WriteLine("--- All Scheduled Flights ---");
             if (!Context.Flights.Any())
@@ -154,6 +153,7 @@ namespace FMS
                     Console.WriteLine($"Code: {f.flightCode} | {f.origin} -> {f.destination} | Date: {f.departureDate:yyyy-MM-dd} {f.departureTime:HH:mm} | Seats Left: {f.availableSeats} | Price: {f.ticketPrice:F2} OMR | Status: {f.flightStatus}");
                 }
             }
+            Console.WriteLine("Press any key to continue...");
             Console.ReadLine();
         }
 
