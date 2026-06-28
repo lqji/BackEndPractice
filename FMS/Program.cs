@@ -97,7 +97,8 @@ namespace FMS
             string model = Console.ReadLine();
             Console.Write("Enter Total Seats: ");
             int seats = int.Parse(Console.ReadLine());
-            
+
+
             int newId = Context.Aircrafts.Count > 0 ? Context.Aircrafts.Max(a => a.aircraftID) + 1 : 1;
             Aircraft aircraft = new Aircraft
             {
