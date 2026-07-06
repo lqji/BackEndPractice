@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FMS", "FMS\FMS.csproj", "{3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnivisitySystem", "UnivisitySystem\UnivisitySystem.csproj", "{0E7D929B-B439-4E79-8082-F59A8229818D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommerceSystem", "EcommerceSystem\EcommerceSystem.csproj", "{E3D13A75-D29D-42F9-8B86-FB470F04B02F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{0E7D929B-B439-4E79-8082-F59A8229818D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E7D929B-B439-4E79-8082-F59A8229818D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E7D929B-B439-4E79-8082-F59A8229818D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3D13A75-D29D-42F9-8B86-FB470F04B02F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3D13A75-D29D-42F9-8B86-FB470F04B02F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3D13A75-D29D-42F9-8B86-FB470F04B02F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3D13A75-D29D-42F9-8B86-FB470F04B02F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
