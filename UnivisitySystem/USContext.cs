@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 namespace UnivisitySystem;
 using UnivisitySystem.models;
 
-public class USContext
+public class USContext : DbContext
 {
     public DbSet<Course> Courses { get; set; }
     public DbSet<Department> Departments { get; set; }
